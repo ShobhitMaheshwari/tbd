@@ -4,5 +4,5 @@ Population data obtained from Wikipedia (https://en.wikipedia.org/wiki/List_of_s
 
 Commands to create data
 
-ogr2ogr -f GeoJSON subunits.json external/maps/States/Admin2.shp
-topojson -o uk.json --id-property SU_A3 --properties name=ST_NM -- subunits.json
+ogr2ogr -f GeoJSON subunits.json external/maps/world/newshape.shp
+topojson -o uk.json --id-property SU_A3 --properties name=ST_NM --properties countryname=NAME -- subunits.json

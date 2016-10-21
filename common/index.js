@@ -15,25 +15,6 @@ var display = function (projection_data){
                 .attr("class", "tooltip")
                 .style("opacity", 0);
 
-    var getColor = function(population_data){
-        //split regions into 6 parts logarithmically based in the population
-        var population = [];
-        for (var name in population_data)
-            population.push(population_data[name]/1000000);
-        population.sort();
-        population.reverse();
-        var boundaries = [];
-        for(var i = 0; i < Math.log(population.length); i+=Math.log(population.length)/6){
-            boundaries.push(population[Math.floor(Math.pow(2.1782817828, i))]);
-        }
-        boundaries.shift();
-        boundaries.reverse();
-        return d3.scaleThreshold()
-                .domain(boundaries.map(function(x){return x*1000000;}))
-                .range(["#fdbb84", "#fc8d59", "#ef6548", "#d7301f", "#b30000", "#7f0000"]);
-        
-    };
-
     d3.json("region.json", function(error, data) {
         if (error) return console.error(error);
 
@@ -54,15 +35,6 @@ var display = function (projection_data){
             .attr("d", path);
 
         d3.json("population.json", function(error, population) {
-            var max = Number.MIN_VALUE, min = Number.MAX_VALUE;
-            for (var key in population){
-                if (max < population[key])
-                    max = population[key];
-                if (min > population[key])
-                    min = population[key];
-            }
-
-            //var color = getColor(population);
             var color = d3.scaleThreshold()
                 .domain([10, 40, 60, 70, 110].map(function(x){return x*1000000;}))
                 .range(["#fdbb84", "#fc8d59", "#ef6548", "#d7301f", "#b30000", "#7f0000"]);
@@ -105,14 +77,8 @@ var display = function (projection_data){
                         .style("opacity", 0);
                 });
 
-            // A position encoding for the key only.
-//            var arr = [];
-//            for (var name in population)
-//                arr.push(population[name]);
-        
             var x = d3.scaleLog()
                 .domain([9000000, 120000000])
-//                .domain([d3.min(arr), d3.max(arr)])
                 .range([0, 480]);
 
             var xAxis = d3.axisBottom()
